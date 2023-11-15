@@ -24,13 +24,30 @@ type SpellStats struct{
 	Range string
 }
 
-
-
-
-
  var Spells = []Spell{}
  var NewSpell Spell
 // App struct
+
+
+func MakeNewDirectory(NewSpellType string){
+	_, err := os.Open(NewSpellType)
+	if err != nil {
+	if os.IsNotExist(err) {
+		directoryname := NewSpellType
+		err2 := os.Mkdir(directoryname, 0755) //create a directory and give it required permissions
+		if err2 != nil {
+		fmt.Println(err2) //print the error on the console
+		return}}}
+	SaveSpellToFolder()
+	fmt.Println("This folder has already been made")
+	}
+
+
+
+
+
+
+
 type App struct {
 	ctx context.Context
 }
@@ -57,14 +74,34 @@ func(a *App) MakeNewSpell(Name string ,Des string,Level string, SpellType string
 	NewSpell.LevelOfSpell = Level
 	NewSpell.NameOfType= SpellType
 	Spells = append(Spells, NewSpell)
+	MakeNewDirectory(NewSpell.NameOfType)
 	fmt.Println(Spells)
 }
 
-func (a *App) SaveNewSpell(newSpell Spell) {
-	err := os.WriteFile(newSpell.Name + ".txt",[]byte(newSpell.Description), 0644) //create a new file
+
+func  SaveSpellToFolder()  {
+	f, err := os.Create(NewSpell.NameOfType +"/" + NewSpell.Name)
 	if err != nil {
-	   fmt.Println(err)
-	   return
+		fmt.Println(err)
+		return
 	}
-	fmt.Println("File is created successfully.")
+	n2, err := f.Write([]byte(NewSpell.Description))
+	if err != nil {
+		fmt.Println(err)
+        f.Close()
+		return
+	}
+	fmt.Println(n2, "bytes written successfully")
+	err = f.Close()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+}
+
+
+
+
+func (a *App) SaveNewSpell(newSpell Spell) {
+	//
 }
