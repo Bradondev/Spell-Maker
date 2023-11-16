@@ -26,6 +26,7 @@ type SpellStats struct{
 
  var Spells = []Spell{}
  var NewSpell Spell
+ var NameOfSpellsInFolder []string 
 // App struct
 
 
@@ -61,6 +62,24 @@ func NewApp() *App {
 // so we can call the runtime methods
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
+
+		f, err := os.Open("Spells")
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		files, err := f.Readdir(0)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+	//
+		for _, v := range files {
+			NameOfSpellsInFolder = append(NameOfSpellsInFolder,v.Name())
+			fmt.Println(v.Name(), v.IsDir())
+		}
+		fmt.Println(NameOfSpellsInFolder)
+	
 }
 
 // Greet returns a greeting for the given name
@@ -80,7 +99,7 @@ func(a *App) MakeNewSpell(Name string ,Des string,Level string, SpellType string
 
 
 func  SaveSpellToFolder()  {
-	f, err := os.Create(NewSpell.NameOfType +"/" + NewSpell.Name)
+	f, err := os.Create("Spells/" +NewSpell.NameOfType +"/" + NewSpell.Name)
 	if err != nil {
 		fmt.Println(err)
 		return
