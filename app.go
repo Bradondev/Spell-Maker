@@ -3,30 +3,32 @@ package main
 import (
 	"context"
 	"fmt"
-	"io"
+	//"io"
 	"os"
-	
+	"encoding/json"
 )
 
 type Spell struct{
 	Name string `json:"name"`
-	Description string `json:"des"`
-	NameOfType string 
-	LevelOfSpell string
-	Stats SpellStats
+	Description string `json:"description"`
+	NameOfType string `json:"nameOfType"`
+	LevelOfSpell string`json:"levelOfSpell"`
+	Stats SpellStats `json:"stats"`
 }
 
 
 
 type SpellStats struct{
-	damage int32
-	Debuff string
-	ManaCost int32
-	CastTime int32
-	Range string
+	Damage int32 `json:"damage"`
+	Debuff string `json:"Debuff"`
+	ManaCost int32	`json:"mana_cost"`
+	CastTime int32	`json:"casttime"`
+	Range string	`json:"range"`
 }
 
- var Spells = []Spell{}
+ var Spells []Spell
+ var temp Spell
+ 
  var NewSpell Spell
  var NameOfSpellsInFolder []string 
 // App struct
@@ -48,52 +50,69 @@ func NewApp() *App {
 
 // startup is called when the app starts. The context is saved
 // so we can call the runtime methods
-func (a *App) startup(ctx context.Context) {
+func (a *App) startup(ctx context.Context)  {
 	a.ctx = ctx
 
-		f, err := os.Open("Spells")
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		files, err := f.Readdir(0)
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-	//
-		for _, v := range files {
-			NameOfSpellsInFolder = append(NameOfSpellsInFolder,v.Name())
-			fmt.Println(v.Name())
-			if v.IsDir(){
-				fmt.Println("open dir")
-				n, err := os.Open("Spells/"+v.Name())
-				if err != nil {
-					fmt.Println(err)
-					return
-				}
-				fmt.Println("Open new text file")
-				SpellFiles, err := n.Readdir(0)
-				if err != nil {
-				fmt.Println(err)
-				return}
-				for _, P := range SpellFiles {
-					file, err := os.Open("Spells/"+v.Name()+"/"+P.Name())
-					if err != nil {
-						fmt.Println(err)
-					}
-					b, err := io.ReadAll(file)
-					fmt.Print(string(b))
-					
-				 }
+	f, err := os.Open("Spells")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	files, err := f.Readdir(0)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
-	////
-				fmt.Println(v.Name() +" is a dir")
+	for _, v := range files {
+		NameOfSpellsInFolder = append(NameOfSpellsInFolder, v.Name())
+		fmt.Println(v.Name())
+
+		if v.IsDir() {
+			fmt.Println("open dir")
+			n, err := os.Open("Spells/" + v.Name())
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			fmt.Println("Open new text file")
+			SpellFiles, err := n.Readdir(0)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+
+			for _, P := range SpellFiles {
+				filePath := "Spells/" + v.Name() + "/" + P.Name()
+				fileData, err := os.ReadFile(filePath)
+				if err != nil {
+					fmt.Println("Error reading file:", err)
+					continue // Move on to the next file
+				}
+
+				// Create a variable to store the unmarshaled data
+				var spell Spell
+
+				// Unmarshal the JSON data into the Spell struct
+				err = json.Unmarshal(fileData, &spell)
+				if err != nil {
+					fmt.Println("Error unmarshaling JSON:", err)
+					continue // Move on to the next file
+				}
+
+				// Append the unmarshaled data to the Spells slice
+				Spells = append(Spells, spell)
 			}
 		}
-		fmt.Println(NameOfSpellsInFolder)
-	
+	}
+	fmt.Println(Spells)
 }
+
+
+func (a *App)Temp()([]Spell ,error){
+	return Spells,nil
+}
+
 ////
 // Greet returns a greeting for the given name
 func (a *App) Greet(name string) string {
@@ -115,21 +134,26 @@ func  SaveSpellToFolder()  {
 	f, err := os.Create("Spells/" +NewSpell.NameOfType +"/" + NewSpell.Name)
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println(f)
 		return
 	}
-	n2, err := f.Write([]byte(NewSpell.Description))
+	
+	jsonData, err := json.MarshalIndent(NewSpell, "", "    ")
 	if err != nil {
-		fmt.Println(err)
-        f.Close()
+		fmt.Println("Error marshaling struct to JSON:", err)
 		return
 	}
-	fmt.Println(n2, "bytes written successfully")
-	err = f.Close()
+
+	// Write JSON data to a file
+	err = os.WriteFile("Spells/" +NewSpell.NameOfType +"/" + NewSpell.Name, jsonData, 0644)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("Error writing JSON data to file:", err)
 		return
 	}
+
+	fmt.Println("Struct saved to person.json")
 }
+
 
 func MakeNewDirectory(NewSpellType string){
 	_, err := os.Open(NewSpellType)
@@ -149,6 +173,3 @@ func MakeNewDirectory(NewSpellType string){
 
 
 
-func (a *App) SaveNewSpell(newSpell Spell) {
-	//
-}
