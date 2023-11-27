@@ -1,26 +1,165 @@
 html {
-    background-color: rgba(27, 38, 54, 1);
-    text-align: center;
-    color: white;
+  background-color: rgba(27, 38, 54, 1);
+  text-align: center;
+  overflow-y: scroll;
 }
 
 body {
-    margin: 0;
-    color: white;
-    font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+  overflow-y: scroll;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  margin: 0;
+  font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
     "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
 }
 
 @font-face {
-    font-family: "Nunito";
-    font-style: normal;
-    font-weight: 400;
-    src: local(""),
+  font-family: "Nunito";
+  font-style: normal;
+  font-weight: 400;
+  src: local(""),
     url("assets/fonts/nunito-v16-latin-regular.woff2") format("woff2");
 }
 
 #app {
-    height: 100vh;
-    text-align: center;
+  height: 100vh;
+  text-align: center;
+}
+
+.input-area {
+  background-color: #fff; /* Background color for the input area */
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle box shadow */
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  color: #333;
+  font-weight: bold;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* Optional: Adjust styles for better appearance */
+h2 {
+  margin: 0;
+  font-size: 1.2em;
+  color: #333;
+}
+button {
+  background-color: #4caf50;
+  color: #fff;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Optional: Add some styling for list items */
+li {
+  margin-bottom: 8px;
+}
+
+/* Remove numbers from ordered list */
+ol {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+.water-column {
+  background-color: #b3e0ff;
+  color: #004080;
+  border: 2px solid #66a3ff; /* Light blue border for water spells */
+}
+
+.earth-column {
+  background-color: #b3ffcc;
+  color: #006633;
+  border: 2px solid #80ffaa; /* Light green border for earth spells */
+}
+
+.fire-column {
+  background-color: #ffcccb;
+  color: #990000;
+  border: 2px solid #ff6666; /* Light red border for fire spells */
+}
+
+.air-column {
+  background-color: #f0f0f0;
+  color: #333;
+  border: 2px solid #b3b3b3; /* Light gray border for air spells */
+}
+
+.light-column {
+  background-color: #ffffcc;
+  color: #666600;
+  border: 2px solid #cccc66; /* Light yellow border for light spells */
+}
+
+.dark-column {
+  background-color: #e0ccff;
+  color: #660099;
+  border: 2px solid #cc99ff; /* Light purple border for dark spells */
+}
+
+.default-column {
+  background-color: #f0f0f0;
+  color: #333;
+  border: 2px solid #ccc; /* Light gray border for default cases */
+}
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.water-column,
+.earth-column,
+.fire-column,
+.air-column,
+.light-column,
+.dark-column,
+.default-column {
+  padding: 20px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  margin: 10px;
+}
+.grid-container {
+  display: grid;
+  grid-template-rows: repeat(2, 1fr);
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  padding: 20px;
+  background-color: #fff; /* Background color for the grid area */
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.grid-item {
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
 }

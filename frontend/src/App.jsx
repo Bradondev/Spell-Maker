@@ -5,9 +5,32 @@ import "./App.css";
 import { Greet } from "../wailsjs/go/main/App";
 import { MakeNewSpell } from "../wailsjs/go/main/App";
 import { Temp } from "../wailsjs/go/main/App";
+
 function Spell({ name, level, type, description }) {
+  console.log(type);
+  const getColumnTypeClass = () => {
+    switch (type) {
+      case "Water":
+        return "water-column";
+      case "Earth":
+        return "earth-column";
+      case "Fire":
+        return "fire-column";
+      case "Air":
+        return "air-column";
+      case "Light":
+        return "light-column";
+      case "Dark":
+        return "dark-column";
+      default:
+        return "default-column";
+    }
+  };
+
+  const columnClass = getColumnTypeClass();
+
   return (
-    <div className="Spell">
+    <div className={`grid-item ${columnClass}`}>
       <h1>{name}</h1>
       <ul>
         <li>Level: {level}</li>
@@ -46,6 +69,7 @@ function App() {
   }
   function SaveFile() {
     MakeNewSpell(name, Des, Level, SpellType);
+    Spells();
   }
 
   function Spells() {
@@ -56,13 +80,10 @@ function App() {
 
   return (
     <div id="App">
-      <div id="result" className="result">
-        {resultText}
-      </div>
-      <div id="input" className="input-box">
+      <div id="input" className="input-area">
         <input
           id="name"
-          className="input"
+          className="input-group"
           onChange={updateName}
           autoComplete="off"
           name="input"
@@ -71,14 +92,17 @@ function App() {
         />
         <input
           id="name"
-          className="input"
+          className="input-group"
           onChange={updateLevel}
           autoComplete="off"
           name="input"
           type="text"
           placeholder="Level"
         />
-        <label for="chooseOption">Element of magic spell</label>
+
+        <label className="input-group" for="chooseOption">
+          Element of magic spell
+        </label>
         <select id="chooseOption" onChange={updateSpellType}>
           <option value="Fire">Fire</option>
           <option value="Water">Water</option>
@@ -87,20 +111,22 @@ function App() {
           <option value="Light">Light</option>
           <option value="Dark">Dark</option>
         </select>
+
         <input
           id="name"
-          className="input"
+          className="input-group"
           onChange={updateDes}
           autoComplete="off"
           name="input"
           type="text"
           placeholder="Des"
         />
+
         <button className="btn" onClick={SaveFile}>
           Save
         </button>
         <div>
-          <div>
+          <div class="grid-container">
             <h1>Spells List</h1>
             {temp.map((spell) => (
               <Spell
@@ -113,7 +139,6 @@ function App() {
             ))}
           </div>
         </div>
-        //
       </div>
     </div>
   );

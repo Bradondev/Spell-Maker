@@ -1,0 +1,13 @@
+{
+    "name": "Air bullet",
+    "description": "Shoots a simple sharp ball of air",
+    "nameOfType": "Air",
+    "levelOfSpell": "1",
+    "stats": {
+        "damage": 0,
+        "Debuff": "",
+        "mana_cost": 0,
+        "casttime": 0,
+        "range": ""
+    }
+}
